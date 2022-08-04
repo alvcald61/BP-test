@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class MovementService implements IMovementService {
   public List<MovementResponse> getAllMovements() {
     try {
       return movementRepository
-        .findAll()
+        .findAllByIsActiveIsTrue()
         .stream()
         .map(objectMapper::mapMovementResponse)
         .collect(Collectors.toList());
@@ -46,8 +47,13 @@ public class MovementService implements IMovementService {
   @Override
   public boolean deleteMovement(Long id) {
     try {
-      movementRepository.deleteById(id);
+      Movement movement = movementRepository.findById(id)
+        .orElseThrow(() -> new CustomException("Movement not found", HttpStatus.NOT_FOUND));
+      movement.setActive(false);
+      movementRepository.save(movement);
       return true;
+    } catch (CustomException e) {
+      throw e;
     } catch (Exception e) {
       throw new CustomException("Error al eliminar el movimiento", HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -91,6 +97,18 @@ public class MovementService implements IMovementService {
     } catch (Exception e) {
       throw new CustomException("Error al actualizar el movimiento", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @Override
+  public MovementResponse getMovement(Long id) {
+    if (id == null) {
+      throw new CustomException("Id no puede ser nulo", HttpStatus.BAD_REQUEST);
+    }
+    Optional<Movement> movement = movementRepository.findById(id);
+    if (movement.isEmpty()) {
+      throw new CustomException("El movimiento no se encontró", HttpStatus.NOT_FOUND);
+    }
+    return objectMapper.mapMovementResponse(movement.get());
   }
 
 }

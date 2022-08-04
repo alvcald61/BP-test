@@ -18,6 +18,9 @@ public class MovementResponse {
   @SerializedName(value = "clientName")
   private String bankAccountClientName;
 
+  @SerializedName(value = "clientId")
+  private Long bankAccountClientId;
+
   @SerializedName("accountNumber")
   private String bankAccountAccountNumber;
 }

@@ -14,4 +14,5 @@ public interface IMovementService {
 
   MovementResponse updateMovement(MovementRequest movement);
 
+  MovementResponse getMovement(Long id);
 }

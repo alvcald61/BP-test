@@ -17,3 +17,31 @@ export const postMovement = async (client : Movement) => {
     const data = await response.json();
     return data ;
 }
+
+export const putMovement = async (client : Movement) => {
+    const response = await fetch(`${API_URL}/api/movimientos/actualizar`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(client)    })
+    const data = await response.json();
+    return data ;
+}
+
+export const deleteMovement = async (id : number) => {
+    const response = await fetch(`${API_URL}/api/movimientos/eliminar/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    const data = await response.json();
+    return data ;
+}
+
+export const searchMovement = async (id : string) => {
+    const response = await fetch(`${API_URL}/api/movimientos/buscar/${id}`);
+    const data = await response.json();
+    return data ;
+}

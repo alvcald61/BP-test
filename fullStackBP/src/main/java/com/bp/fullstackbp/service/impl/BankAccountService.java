@@ -51,7 +51,7 @@ public class BankAccountService implements IBankAccountService {
   public List<BankAccountResponse> getAllBankAccounts() {
     try {
       return bankAccountRepository
-        .findAll()
+        .findAllByIsActiveIsTrue()
         .stream()
         .map(objectMapper::mapBankAccountResponse)
         .collect(Collectors.toList());
@@ -63,8 +63,13 @@ public class BankAccountService implements IBankAccountService {
   @Override
   public boolean deleteBankAccount(Long id) {
     try {
-      bankAccountRepository.deleteById(id);
+      BankAccount account = bankAccountRepository.findById(id)
+        .orElseThrow(() -> new CustomException("No se encuentra la cuenta bancaria", HttpStatus.NOT_FOUND));
+      account.setActive(false);
+      bankAccountRepository.save(account);
       return true;
+    } catch (CustomException e) {
+      throw e;
     } catch (Exception e) {
       throw new CustomException("Error al eliminar el movimiento", HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -99,6 +104,19 @@ public class BankAccountService implements IBankAccountService {
       return client.getBankAccounts().stream().map(objectMapper::mapBankAccountResponse).collect(Collectors.toList());
     }
     return new ArrayList<>();
+  }
+
+  @Override
+  public BankAccountResponse getBankAccountById(Long id) {
+    if (id == null) {
+      throw new CustomException("Id de la cuenta no enviado", HttpStatus.BAD_REQUEST);
+    }
+    Optional<BankAccount> optAccount = bankAccountRepository.findById(id);
+    if (optAccount.isEmpty()) {
+      throw new CustomException("Cuenta bancaria no encontrada", HttpStatus.NOT_FOUND);
+    }
+    BankAccount account = optAccount.get();
+    return objectMapper.mapBankAccountResponse(account);
   }
 
 }

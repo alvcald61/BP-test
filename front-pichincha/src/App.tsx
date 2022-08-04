@@ -3,12 +3,12 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Clientes from './pages/clientes';
-import NuevoCliente from './pages/clientes/nuevoCliente';
+import NuevoCliente from './pages/clientes/newClient';
 import Cuentas from './pages/cuentas';
 import Movimientos from './pages/movimientos';
 import Reportes from './pages/reportes';
-import NuevoMovimiento from './pages/movimientos/nuevoMovimiento';
-import NuevaCuenta from './pages/cuentas/nuevaCuenta';
+import NuevoMovimiento from './pages/movimientos/newMovement';
+import NuevaCuenta from './pages/cuentas/newBankAccount';
 function App() {
   return (
     <div className="light-mode"> 
@@ -24,10 +24,13 @@ function App() {
           <Route path="clientes" element={<Clientes />} >
           </Route>
             <Route path="/clientes/nuevo" element={<NuevoCliente />} />  
+            <Route path="/clientes/editar/:id" element={<NuevoCliente />} />  
           <Route path="cuentas"  element={<Cuentas />} />
           <Route path="/cuentas/nuevo"  element={<NuevaCuenta />} />
+          <Route path="/cuentas/editar/:id"  element={<NuevaCuenta />} />
           <Route path="movimientos"  element = {<Movimientos/>}/>
           <Route path="/movimientos/nuevo"  element = {<NuevoMovimiento/>}/>
+          <Route path="/movimientos/editar/:id"  element = {<NuevoMovimiento/>}/>
           <Route path="reportes"  element ={<Reportes/>}/>
           <Route path="*" element={<div>404</div>} />
         </Routes>

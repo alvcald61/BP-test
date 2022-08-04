@@ -8,15 +8,21 @@ type Props = {
     searchField: string,
     buttonLink: string,
     title? : string
+    deleteAction: (e: React.MouseEvent<HTMLButtonElement>) => void
+    updateAction: (e: React.MouseEvent<HTMLButtonElement>) => void
+    id: string
 }
 
-const Table = ({ data, keys, columns, searchField, buttonLink, title} : Props) => {
+const Table = ({ data, keys, columns, searchField, buttonLink, title, deleteAction, updateAction, id} : Props) => {
   const [buscador, setBuscador] = useState<string>("");
   const navigate = useNavigate();
+
 
   const updateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuscador(e.target.value);
   };
+
+
 
   const changePage = (e: React.MouseEvent<HTMLButtonElement>) => {
     navigate(buttonLink, {replace: true});
@@ -79,7 +85,12 @@ const Table = ({ data, keys, columns, searchField, buttonLink, title} : Props) =
                     console.log(key);
                         return typeof acc[key]!=='boolean' ?  <td>{acc[key]}</td> : <td>{acc[key] ? 'activo' : 'inactivo'}</td>
                     })}
-                    
+                    <td>
+                      <button value = {acc[id]} onClick={deleteAction}>eliminar</button>
+                      <br />
+                      <button value = {acc[id]} onClick={updateAction}>editar</button>
+
+                    </td>
                   </tr>
                 );
               })}

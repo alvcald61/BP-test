@@ -54,4 +54,13 @@ public class MovementController {
       return new StandardResponse<>(e);
     }
   }
+
+  @GetMapping("/buscar/{id}")
+  public StandardResponse<MovementResponse> getMovement(@PathVariable Long id) {
+    try {
+      return new StandardResponse<>(movementService.getMovement(id));
+    } catch (CustomException e) {
+      return new StandardResponse<>(e);
+    }
+  }
 }

@@ -45,10 +45,19 @@ public class ClientController {
     }
   }
 
-  @DeleteMapping("eliminar/{id}")
+  @DeleteMapping("/eliminar/{id}")
   public StandardResponse<Boolean> deleteClient(@PathVariable Long id) {
     try {
       return new StandardResponse<>(clientService.deleteClient(id));
+    } catch (CustomException e) {
+      return new StandardResponse<>(e);
+    }
+  }
+
+  @GetMapping("/buscar/{id}")
+  public StandardResponse<ClientResponse> getClient(@PathVariable Long id) {
+    try {
+      return new StandardResponse<>(clientService.getClient(id));
     } catch (CustomException e) {
       return new StandardResponse<>(e);
     }

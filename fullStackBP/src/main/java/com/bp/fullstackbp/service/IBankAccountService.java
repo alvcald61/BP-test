@@ -15,4 +15,6 @@ public interface IBankAccountService {
   BankAccountResponse updateBankAccount(BankAccountRequest bankAccountRequest);
 
   List<BankAccountResponse> getMovement(Long id);
+
+  BankAccountResponse getBankAccountById(Long id);
 }

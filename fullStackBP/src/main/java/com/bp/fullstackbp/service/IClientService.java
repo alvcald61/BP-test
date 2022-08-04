@@ -15,4 +15,6 @@ public interface IClientService {
   ClientResponse updateClient(ClientRequest client);
 
   boolean deleteClient(Long id);
+
+  ClientResponse getClient(Long id);
 }

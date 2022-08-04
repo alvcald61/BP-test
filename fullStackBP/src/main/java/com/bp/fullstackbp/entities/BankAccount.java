@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class BankAccount {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   private String accountNumber;

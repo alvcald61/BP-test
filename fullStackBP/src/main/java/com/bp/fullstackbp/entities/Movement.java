@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 public class Movement {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -29,6 +29,8 @@ public class Movement {
   private double initialBalance;
 
   private double availableBalance;
+
+  private boolean isActive;
 
   @ManyToOne
   @JoinColumn(name = "bank_account_id")

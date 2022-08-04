@@ -33,7 +33,7 @@ public class ClientService implements IClientService {
   public List<ClientResponse> getAllClients() {
     try {
       return clientRepository
-        .findAll()
+        .findAllByIsActiveIsTrue()
         .stream()
         .map(client -> objectMapper.map(client, ClientResponse.class))
         .collect(Collectors.toList());
@@ -58,6 +58,7 @@ public class ClientService implements IClientService {
       System.out.println("Creando cliente: " + client);
       Client newClient = objectMapper.map(client, Client.class);
       newClient.setActive(true);
+      newClient.setId(null);
       return objectMapper.map(clientRepository.save(newClient), ClientResponse.class);
     } catch (Exception e) {
       throw new CustomException("Error al crear el cliente", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,9 +79,23 @@ public class ClientService implements IClientService {
   public boolean deleteClient(Long id) {
     Optional<Client> clientToDelete = clientRepository.findById(id);
     if (clientToDelete.isPresent()) {
-      clientRepository.deleteById(id);
+      Client client = clientToDelete.get();
+      client.setActive(false);
+      clientRepository.save(client);
       return true;
     }
     return false;
+  }
+
+  @Override
+  public ClientResponse getClient(Long id) {
+    if (id == null) {
+      throw new CustomException("Id de cliente no enviado", HttpStatus.BAD_REQUEST);
+    }
+    Optional<Client> client = clientRepository.findById(id);
+    if (client.isPresent()) {
+      return objectMapper.map(client.get(), ClientResponse.class);
+    }
+    throw new CustomException("Cliente no encontrado", HttpStatus.NOT_FOUND);
   }
 }

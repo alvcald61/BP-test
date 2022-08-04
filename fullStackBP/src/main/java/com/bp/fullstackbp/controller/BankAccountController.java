@@ -93,4 +93,13 @@ public class BankAccountController {
     }
   }
 
+  @GetMapping("/buscar/{id}")
+  public StandardResponse<BankAccountResponse> getBankAccountById(@PathVariable Long id) {
+    try {
+      return new StandardResponse<>(bankAccountService.getBankAccountById(id));
+    } catch (CustomException e) {
+      return new StandardResponse<>(e);
+    }
+  }
+
 }
